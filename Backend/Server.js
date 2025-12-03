@@ -21,7 +21,7 @@ connectDB();
 // Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173" ,"https://task-management-system-khaki-five.vercel.app"],
     credentials: true
   })
 );
