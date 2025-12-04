@@ -383,7 +383,7 @@ const sendEmail = async (to, subject, text, type = 'general') => {
     }
 
     const transport = nodemailer.createTransport({
-       host : "smtp.sendgird.net",
+       host : "smtp.sendgrid.net",
        port : 587,
        secure : false,
       auth: {
