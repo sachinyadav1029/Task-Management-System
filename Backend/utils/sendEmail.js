@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const sgMail = require("@sendgrid/mail");
 
 const sendEmail = async (to, subject, text, type = 'general') => {
   try {
@@ -378,10 +379,34 @@ const sendEmail = async (to, subject, text, type = 'general') => {
       `;
     }
 
-   if (! process.env.EMAIL_USER|| !process.env.EMAIL_PASS) {
-      throw new Error('Missing SENDGRID_USER or SENDGRID_PASS in environment variables.');
-    }
+  // Requires : API key must exist
 
+  if(!process.env.EMAIL_PASS){
+    throw new Error("Missing SendGrid API Key in Email_Pass")
+  }
+  
+  // The SMTP not work on RENDER server 
+  // There is some changes need to Done 
+
+  sgMail.setApiKey(process.env.EMAIL_PASS);
+
+  // Build Email
+
+  const msg = {
+       to,
+       from: "no-reply@taskflow.com",
+       subject,
+       text,
+       html: htmlTemplate
+  };
+
+  // Send via SendGrid WEB API (NOT SMTP)
+
+  await sgMail.send(msg);
+
+ /*
+
+   OLD CODE -> IT WORK ON LOCAL HOST BUT NOT RENDER SEVER 
     const transport = nodemailer.createTransport({
        host : "smtp.sendgrid.net",
        port : 587,
@@ -392,18 +417,22 @@ const sendEmail = async (to, subject, text, type = 'general') => {
       }
     });
 
-    console.log('Sending email with credentials:', {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS ? '[REDACTED]' : 'MISSING'
-    });
-
-    await transport.sendMail({
+       await transport.sendMail({
       from: `"TaskFlow" <no-reply@taskflow.com>`,
       to,
       subject,
       text,
       html: htmlTemplate
     });
+
+    */
+
+    // console.log('Sending email with credentials:', {
+    //   user: process.env.EMAIL_USER,
+    //   pass: process.env.EMAIL_PASS ? '[REDACTED]' : 'MISSING'
+    // });
+
+ 
 
     console.log("✅ Email sent successfully to:", to);
   } catch (error) {
