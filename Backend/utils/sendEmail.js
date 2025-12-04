@@ -378,7 +378,7 @@ const sendEmail = async (to, subject, text, type = 'general') => {
       `;
     }
 
-   if (!process.env.SENDGRID_USER || !process.env.SENDGRID_PASS) {
+   if (! process.env.EMAIL_USER|| !process.env.EMAIL_PASS) {
       throw new Error('Missing SENDGRID_USER or SENDGRID_PASS in environment variables.');
     }
 
