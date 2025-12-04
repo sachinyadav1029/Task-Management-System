@@ -378,13 +378,14 @@ const sendEmail = async (to, subject, text, type = 'general') => {
       `;
     }
 
-    // Check if environment variables are set
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      throw new Error('Email configuration is missing. Please check EMAIL_USER and EMAIL_PASS environment variables.');
+   if (!process.env.SENDGRID_USER || !process.env.SENDGRID_PASS) {
+      throw new Error('Missing SENDGRID_USER or SENDGRID_PASS in environment variables.');
     }
 
     const transport = nodemailer.createTransport({
-      service: "gmail",
+       host : "smtp.sendgird.net",
+       port : 587,
+       secure : false,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -397,7 +398,7 @@ const sendEmail = async (to, subject, text, type = 'general') => {
     });
 
     await transport.sendMail({
-      from: `"TaskFlow" <${process.env.EMAIL_USER}>`,
+      from: `"TaskFlow" <no-reply@taskflow.com>`,
       to,
       subject,
       text,
