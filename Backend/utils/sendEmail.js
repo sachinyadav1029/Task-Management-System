@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const sgMail = require("@sendgrid/mail");
+const {Resend} = require("resend");
 
 const sendEmail = async (to, subject, text, type = 'general') => {
   try {
@@ -379,6 +380,33 @@ const sendEmail = async (to, subject, text, type = 'general') => {
       `;
     }
 
+
+   /// USING THE RESEND API TO SEND THE EMAIL TO  USER
+
+   const resend = new Resend(process.env.RESEND_API_KEY);
+  
+
+   if(!process.env.RESEND_API_KEY){
+       throw new Error("Missing RESEND_API_KEY");
+   }
+
+
+   const result = await resend.emails.send({
+      from : "Taskflow <onboarding@resend.dev",
+      to,
+      subject,
+      html : htmlTemplate,
+   });
+
+
+    console.log("Enmail Sent : " , result.id);
+    
+
+
+
+    /*
+
+
   // Requires : API key must exist
 
   if(!process.env.EMAIL_PASS){
@@ -403,6 +431,8 @@ const sendEmail = async (to, subject, text, type = 'general') => {
   // Send via SendGrid WEB API (NOT SMTP)
 
   await sgMail.send(msg);
+
+  */
 
  /*
 
@@ -432,7 +462,7 @@ const sendEmail = async (to, subject, text, type = 'general') => {
     //   pass: process.env.EMAIL_PASS ? '[REDACTED]' : 'MISSING'
     // });
 
- 
+    
 
     console.log("✅ Email sent successfully to:", to);
   } catch (error) {
