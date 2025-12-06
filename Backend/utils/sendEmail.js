@@ -391,16 +391,15 @@ const sendEmail = async (to, subject, text, type = 'general') => {
    }
 
 
-   const result = await resend.emails.send({
-      from : "Taskflow <onboarding@resend.dev",
-      to,
-      subject,
-      html : htmlTemplate,
-   });
+ const result = await resend.emails.send({
+  from: "TaskFlow <onboarding@resend.dev>",
+  to,
+  subject,
+  html: htmlTemplate,
+});
 
+  console.log("Enmail Sent : " , result.id);
 
-    console.log("Enmail Sent : " , result.id);
-    
 
 
 
