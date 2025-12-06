@@ -381,6 +381,27 @@ const sendEmail = async (to, subject, text, type = 'general') => {
     }
 
 
+    const transport = nodemailer.createTransport({
+         host:"smtp-relay.sendinblue.com",
+         port:587,
+         secure:false,
+         auth:{
+           user:process.env.BREVO_SMTP_USER,
+           pass:process.env.BREVO_SMTP_PASS,
+         }
+    })
+
+
+    await transport.sendMail({
+      from:`"TaskFlow" <${process.env.BREVO_SMTP_USER}>`,
+      to,
+      subject,
+      html : htmlTemplate,
+    });
+
+
+    /*
+
    /// USING THE RESEND API TO SEND THE EMAIL TO  USER
 
    const resend = new Resend(process.env.RESEND_API_KEY);
@@ -401,10 +422,6 @@ const sendEmail = async (to, subject, text, type = 'general') => {
   console.log("Enmail Sent : " , result.id);
   console.log("Resend result:", result);
 
-
-
-
-    /*
 
 
   // Requires : API key must exist
