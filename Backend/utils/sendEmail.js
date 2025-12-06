@@ -381,15 +381,16 @@ const sendEmail = async (to, subject, text, type = 'general') => {
     }
 
 
-    const transport = nodemailer.createTransport({
-         host:"smtp-relay.sendinblue.com",
-         port:587,
-         secure:false,
-         auth:{
-           user:process.env.BREVO_SMTP_USER,
-           pass:process.env.BREVO_SMTP_PASS,
-         }
-    })
+    const transporter = nodemailer.createTransport({
+  host: "smtp-relay.sendinblue.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.BREVO_SMTP_USER,
+    pass: process.env.BREVO_SMTP_PASS,
+  }
+});
+
 
 
     await transport.sendMail({
