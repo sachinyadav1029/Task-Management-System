@@ -399,6 +399,7 @@ const sendEmail = async (to, subject, text, type = 'general') => {
 });
 
   console.log("Enmail Sent : " , result.id);
+  console.log("Resend result:", result);
 
 
 
