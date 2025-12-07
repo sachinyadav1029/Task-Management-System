@@ -1,6 +1,5 @@
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
-
 const sendEmail = async (to, subject, text, type = "general") => {
   try {
     console.log("Preparing to send email:", { to, subject, type });
@@ -381,7 +380,7 @@ const sendEmail = async (to, subject, text, type = "general") => {
       `;
     }
 
-        const mailerSend = new MailerSend({
+    const mailerSend = new MailerSend({
       apiKey: process.env.MAILERSEND_API_KEY,
     });
 
@@ -409,4 +408,4 @@ const sendEmail = async (to, subject, text, type = "general") => {
   }
 };
 
-module.exports = sendEmail;
+export default sendEmail;

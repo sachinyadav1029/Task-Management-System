@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const taskSchema = new mongoose.Schema(
   {
@@ -73,4 +73,4 @@ taskSchema.virtual('id').get(function () {
 taskSchema.set('toJSON', { virtuals: true });
 taskSchema.set('toObject', { virtuals: true });
 
-module.exports = mongoose.models.Task || mongoose.model('Task', taskSchema);
+export default mongoose.models.Task || mongoose.model('Task', taskSchema);

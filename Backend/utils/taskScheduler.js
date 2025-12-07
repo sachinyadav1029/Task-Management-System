@@ -1,6 +1,6 @@
-const cron = require('node-cron');
-const Task = require('../Models/Task');
-const sendEmail = require('./sendEmail');
+import cron from 'node-cron';
+import Task from '../Models/Task.js';
+import sendEmail from './sendEmail.js';
 
 // Helper to combine date and time strings into a Date object
 function combineDateTime(date, time) {
@@ -100,6 +100,6 @@ function startTaskScheduler() {
   });
 }
 
-module.exports = {
+export {
   startTaskScheduler,
 };

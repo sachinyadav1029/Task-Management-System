@@ -1,5 +1,5 @@
-const express = require('express');
-const {
+import express from 'express';
+import {
   signup,
   login,
   resendOtp,
@@ -11,8 +11,8 @@ const {
   getProfile,
   updateProfile,
   deleteUser,
-} = require('../controllers/authController');
-const authMiddleware = require('../middleware/authMiddleware');
+} from '../controllers/authController.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -30,4 +30,4 @@ router.get('/profile', authMiddleware, getProfile);
 router.put('/profile', authMiddleware, updateProfile);
 router.delete('/profile', authMiddleware, deleteUser); // Add delete user route
 
-module.exports = router;
+export default router;

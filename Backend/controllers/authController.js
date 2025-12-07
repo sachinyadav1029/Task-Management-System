@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const User = require('../Models/Userdata');
-const Task = require('../Models/Task'); // Add this line
-const { generateOtp, generateToken } = require('../utils/authUtils');
-const sendEmail = require('../utils/sendEmail');
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import User from '../Models/Userdata.js';
+import Task from '../Models/Task.js';
+import { generateOtp, generateToken } from '../utils/authUtils.js';
+import sendEmail from '../utils/sendEmail.js';
 
 // Helper function to create OTP expiration date with buffer
 const createOtpExpirationDate = (minutes) => {
@@ -38,7 +38,7 @@ const isOtpExpired = (expiryDate, bufferSeconds = 120) => {
 };
 
 // ------------------------ SIGNUP ------------------------
-exports.signup = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -133,7 +133,7 @@ exports.signup = async (req, res) => {
 };
 
 // ------------------------ LOGIN ------------------------
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -184,7 +184,7 @@ exports.login = async (req, res) => {
 };
 
 // Resend OTP
-exports.resendOtp = async (req, res) => {
+export const resendOtp = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -235,7 +235,7 @@ exports.resendOtp = async (req, res) => {
 };
 
 // Verify OTP
-exports.verifyOtp = async (req, res) => {
+export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
@@ -335,7 +335,7 @@ exports.verifyOtp = async (req, res) => {
 };
 
 // Forgot Password - Send OTP
-exports.forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -392,7 +392,7 @@ exports.forgotPassword = async (req, res) => {
 };
 
 // Verify OTP for password reset
-exports.verifyResetOtp = async (req, res) => {
+export const verifyResetOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
 
@@ -429,7 +429,7 @@ exports.verifyResetOtp = async (req, res) => {
 };
 
 // Reset Password with OTP verification
-exports.resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
   try {
     const { email, otp, newPassword, resetToken } = req.body;
 
@@ -477,7 +477,7 @@ exports.resetPassword = async (req, res) => {
 };
 
 // Check OTP status
-exports.checkOtpStatus = async (req, res) => {
+export const checkOtpStatus = async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -510,7 +510,7 @@ exports.checkOtpStatus = async (req, res) => {
 };
 
 // Get current user profile
-exports.getProfile = async (req, res) => {
+export const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-passwordHash -otpCode');
     if (!user) {
@@ -528,7 +528,7 @@ exports.getProfile = async (req, res) => {
 };
 
 // Update user profile
-exports.updateProfile = async (req, res) => {
+export const updateProfile = async (req, res) => {
   try {
     const { name, profilePicture } = req.body;
     const userId = req.user.id;
@@ -558,7 +558,7 @@ exports.updateProfile = async (req, res) => {
 };
 
 // Delete user account and all associated tasks
-exports.deleteUser = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
     const userId = req.user.id; // Get user ID from auth middleware
     
@@ -594,9 +594,3 @@ exports.deleteUser = async (req, res) => {
     });
   }
 };
-
-
-
-
-
-

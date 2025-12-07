@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 // Generate a 6-digit OTP
 const generateOtp = () => {
@@ -13,7 +13,7 @@ const generateToken = (userId) => {
   });
 };
 
-module.exports = {
+export {
   generateOtp,
   generateToken,
 };

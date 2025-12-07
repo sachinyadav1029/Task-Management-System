@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const User = require('../Models/Userdata');
+import jwt from 'jsonwebtoken';
+import User from '../Models/Userdata.js';
 
 // ... rest of the authMiddleware.js code remains the same
 
@@ -39,4 +39,4 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+export default authMiddleware;

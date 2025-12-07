@@ -1,7 +1,8 @@
-const Task = require('../Models/Task');
+import Task from '../Models/Task.js';
+import sendEmail from '../utils/sendEmail.js';
 
 // Create a new task
-exports.createTask = async (req, res) => {
+export const createTask = async (req, res) => {
   try {
     const { title, description, priority, deadline, setTime, completed, startDate, startTime, reminderMinutes } = req.body;
 
@@ -51,7 +52,7 @@ exports.createTask = async (req, res) => {
 };
 
 // Get all tasks for the authenticated user
-exports.getTasks = async (req, res) => {
+export const getTasks = async (req, res) => {
   try {
     const { page = 1, limit = 10, sortBy = 'createdAt', order = 'desc', priority, completed } = req.query;
     
@@ -91,7 +92,7 @@ exports.getTasks = async (req, res) => {
 };
 
 // Get a single task by ID
-exports.getTask = async (req, res) => {
+export const getTask = async (req, res) => {
   try {
     const task = await Task.findOne({
       _id: req.params.id,
@@ -110,7 +111,7 @@ exports.getTask = async (req, res) => {
 };
 
 // Update a task
-exports.updateTask = async (req, res) => {
+export const updateTask = async (req, res) => {
   try {
     const { title, description, priority, deadline, setTime, completed, startDate, startTime, reminderMinutes } = req.body;
 
@@ -160,7 +161,6 @@ exports.updateTask = async (req, res) => {
         const text = `Great job! You have successfully completed your task "${task.title}". Keep up the excellent work!`;
 
         // Send email asynchronously (don't wait for it)
-        const sendEmail = require('../utils/sendEmail');
         sendEmail(userEmail, subject, text, 'completion').catch(err => {
           console.error('Error sending completion email:', err);
         });
@@ -175,7 +175,7 @@ exports.updateTask = async (req, res) => {
 };
 
 // Delete a task
-exports.deleteTask = async (req, res) => {
+export const deleteTask = async (req, res) => {
   try {
     const task = await Task.findOneAndDelete({
       _id: req.params.id,

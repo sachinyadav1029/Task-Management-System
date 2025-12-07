@@ -1,8 +1,8 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "type": "commonjs", 
   "main": "Server.js",
-  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node Server.js"

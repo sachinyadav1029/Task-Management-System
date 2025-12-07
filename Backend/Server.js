@@ -1,16 +1,17 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const connectDB = require('./config/database');
-const { startTaskScheduler } = require('./utils/taskScheduler');
+import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
+import cors from 'cors';
+import connectDB from './config/database.js';
+import { startTaskScheduler } from './utils/taskScheduler.js';
 
 // Import models to ensure they are registered with mongoose
-const User = require('./Models/Userdata');
-const Task = require('./Models/Task');
+import User from './Models/Userdata.js';
+import Task from './Models/Task.js';
 
 // Route imports
-const authRoutes = require('./Routes/auth');
-const taskRoutes = require('./Routes/task');
+import authRoutes from './Routes/auth.js';
+import taskRoutes from './Routes/task.js';
 
 // Initialize express app
 const app = express();
@@ -21,7 +22,7 @@ connectDB();
 // Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173" ,"https://task-management-system-khaki-five.vercel.app"],
+    origin: ["http://localhost:5173", "https://task-management-system-khaki-five.vercel.app"],
     credentials: true
   })
 );
