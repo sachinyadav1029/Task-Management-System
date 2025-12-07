@@ -1,5 +1,3 @@
-const nodemailer = require("nodemailer");
-
 import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
 
 
