@@ -409,4 +409,4 @@ const sendEmail = async (to, subject, text, type = "general") => {
   }
 };
 
-module.exports = sendEmail;
+export default sendEmail;
