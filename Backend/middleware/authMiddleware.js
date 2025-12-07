@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
 import User from '../Models/Userdata.js';
+import dotenv from "dotenv";
+dotenv.config();
+
 
 // ... rest of the authMiddleware.js code remains the same
 
