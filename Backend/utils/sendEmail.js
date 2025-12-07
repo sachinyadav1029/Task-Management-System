@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 
-import { MailerSend, EmailParams, Sender, Recipient } from "@mailersend/sdk";
+import { MailerSend, EmailParams, Sender, Recipient } from "mailersend";
+
 
 const sendEmail = async (to, subject, text, type = "general") => {
   try {
@@ -382,11 +383,10 @@ const sendEmail = async (to, subject, text, type = "general") => {
       `;
     }
 
-    const mailerSend = new MailerSend({
+        const mailerSend = new MailerSend({
       apiKey: process.env.MAILERSEND_API_KEY,
     });
 
-    // IMPORTANT → use your MailerSend test domain
     const sentFrom = new Sender(
       "no-reply@test-69oxl5ewkdrl785k.mlsender.net",
       "TaskFlow"
@@ -401,10 +401,10 @@ const sendEmail = async (to, subject, text, type = "general") => {
       .setHtml(htmlTemplate)
       .setText(text);
 
-    // send
     await mailerSend.email.send(emailParams);
 
-    console.log("✅ Email sent successfully:", to);
+    console.log("Email sent successfully:", to);
+
   } catch (error) {
     console.error("❌ ❌✅Email sending error:", error);
     throw error;
