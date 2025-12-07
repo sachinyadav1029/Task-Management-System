@@ -1,17 +1,19 @@
-const nodemailer = require('nodemailer');
-const sgMail = require("@sendgrid/mail");
-const {Resend} = require("resend");
+const nodemailer = require("nodemailer");
 
-const sendEmail = async (to, subject, text, type = 'general') => {
+import { MailerSend, EmailParams, Sender, Recipient } from "@mailersend/sdk";
+
+const sendEmail = async (to, subject, text, type = "general") => {
   try {
-    console.log('Preparing to send email:', { to, subject, type });
+    console.log("Preparing to send email:", { to, subject, type });
 
     let htmlTemplate;
 
-    if (type === 'otp') {
+    if (type === "otp") {
       // Extract OTP from text - more reliable method
-      const otpMatch = text.match(/Your OTP is: (\d{6})|Your new OTP is: (\d{6})|Your password reset OTP is: (\d{6})/);
-      let otp = '123456'; // default fallback
+      const otpMatch = text.match(
+        /Your OTP is: (\d{6})|Your new OTP is: (\d{6})|Your password reset OTP is: (\d{6})/
+      );
+      let otp = "123456"; // default fallback
 
       if (otpMatch) {
         // Find the first non-undefined group
@@ -123,7 +125,7 @@ const sendEmail = async (to, subject, text, type = 'general') => {
       </body>
       </html>
       `;
-    } else if (type === 'reminder') {
+    } else if (type === "reminder") {
       // Reminder email template
       htmlTemplate = `
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -187,7 +189,7 @@ const sendEmail = async (to, subject, text, type = 'general') => {
       </body>
       </html>
       `;
-    } else if (type === 'overdue') {
+    } else if (type === "overdue") {
       // Overdue email template
       htmlTemplate = `
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -251,7 +253,7 @@ const sendEmail = async (to, subject, text, type = 'general') => {
       </body>
       </html>
       `;
-    } else if (type === 'completion') {
+    } else if (type === "completion") {
       // Completion email template
       htmlTemplate = `
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -380,115 +382,29 @@ const sendEmail = async (to, subject, text, type = 'general') => {
       `;
     }
 
-
-    /* -------------------------------
-       BREVO SMTP TRANSPORT
-    --------------------------------*/
-
-    const transporter = nodemailer.createTransport({
-      host: "smtp-relay.sendinblue.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.BREVO_SMTP_USER,
-        pass: process.env.BREVO_SMTP_PASS,
-      },
+    const mailerSend = new MailerSend({
+      apiKey: process.env.MAILERSEND_API_KEY,
     });
 
+    // IMPORTANT → use your MailerSend test domain
+    const sentFrom = new Sender(
+      "no-reply@test-69oxl5ewkdrl785k.mlsender.net",
+      "TaskFlow"
+    );
 
-    /* -------------------------------
-       SEND EMAIL!!
-    --------------------------------*/
+    const recipients = [new Recipient(to)];
 
-    const info = await transporter.sendMail({
-      from: `"TaskFlow" <${process.env.BREVO_SMTP_USER}>`,
-      to,
-      subject,
-      html: htmlTemplate,
-    });
+    const emailParams = new EmailParams()
+      .setFrom(sentFrom)
+      .setTo(recipients)
+      .setSubject(subject)
+      .setHtml(htmlTemplate)
+      .setText(text);
 
-    /*
+    // send
+    await mailerSend.email.send(emailParams);
 
-   /// USING THE RESEND API TO SEND THE EMAIL TO  USER
-
-   const resend = new Resend(process.env.RESEND_API_KEY);
-  
-
-   if(!process.env.RESEND_API_KEY){
-       throw new Error("Missing RESEND_API_KEY");
-   }
-
-
- const result = await resend.emails.send({
-  from: "TaskFlow <onboarding@resend.dev>",
-  to,
-  subject,
-  html: htmlTemplate,
-});
-
-  console.log("Enmail Sent : " , result.id);
-  console.log("Resend result:", result);
-
-
-
-  // Requires : API key must exist
-
-  if(!process.env.EMAIL_PASS){
-    throw new Error("Missing SendGrid API Key in Email_Pass")
-  }
-  
-  // The SMTP not work on RENDER server 
-  // There is some changes need to Done 
-
-  sgMail.setApiKey(process.env.EMAIL_PASS);
-
-  // Build Email
-
-  const msg = {
-       to,
-       from: "no-reply@taskflow.com",
-       subject,
-       text,
-       html: htmlTemplate
-  };
-
-  // Send via SendGrid WEB API (NOT SMTP)
-
-  await sgMail.send(msg);
-
-  */
-
- /*
-
-   OLD CODE -> IT WORK ON LOCAL HOST BUT NOT RENDER SEVER 
-    const transport = nodemailer.createTransport({
-       host : "smtp.sendgrid.net",
-       port : 587,
-       secure : false,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
-
-       await transport.sendMail({
-      from: `"TaskFlow" <no-reply@taskflow.com>`,
-      to,
-      subject,
-      text,
-      html: htmlTemplate
-    });
-
-    */
-
-    // console.log('Sending email with credentials:', {
-    //   user: process.env.EMAIL_USER,
-    //   pass: process.env.EMAIL_PASS ? '[REDACTED]' : 'MISSING'
-    // });
-
-    
-
-    console.log("✅ Email sent successfully to:", to);
+    console.log("✅ Email sent successfully:", to);
   } catch (error) {
     console.error("❌ ❌✅Email sending error:", error);
     throw error;
