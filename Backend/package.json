@@ -1,33 +1,27 @@
 {
-  "name": "backend",
+  "name": "your-project",
   "version": "1.0.0",
-  "type": "commonjs", 
-  "main": "Server.js",
+  "type": "module",
+  "main": "Backend/Server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node Server.js"
+    "start": "node Backend/Server.js",
+    "dev": "nodemon Backend/Server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "@sendgrid/mail": "^8.1.6",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
-    "crypto": "^1.0.1",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "googleapis": "^167.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mailersend": "^2.6.0",
-    "mailsender": "^1.1.2",
     "mongoose": "^8.18.1",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.11",
-    "nodemon": "^3.1.10",
-    "resend": "^6.5.2"
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
